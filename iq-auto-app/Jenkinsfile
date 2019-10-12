@@ -1,0 +1,15 @@
+
+pipeline {
+    agent any
+
+    environment {
+    }
+
+    stages {
+        stage('Preparation') {
+		echo "Hello from Nexus-IQ pipeline"
+		}
+	}
+}
+
+
