@@ -3,13 +3,15 @@ pipeline {
     agent any
 
     environment {
-			APP = 'unknown'
+		APP = 'unknown'
     }
 
     stages {
         stage('Preparation') {
 			steps {
 				echo "Hello from Nexus-IQ pipeline"
+				echo "${IQ_ORGANISATION}"
+				echo "${IQ_APPLICATION}"
 			}
 		}
 	}
