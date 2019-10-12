@@ -11,7 +11,7 @@ pipeline {
 			steps {
 				echo "Hello from Nexus-IQ pipeline"
 				echo "${IQ_ORGANISATION}"
-				// echo "${IQ_APPLICATION}"
+				echo "${IQ_APPLICATION}"
 			}
 		}
 	}
