@@ -7,7 +7,9 @@ pipeline {
 
     stages {
         stage('Preparation') {
-		echo "Hello from Nexus-IQ pipeline"
+			steps {
+				echo "Hello from Nexus-IQ pipeline"
+			}
 		}
 	}
 }
