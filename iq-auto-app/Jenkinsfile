@@ -30,9 +30,9 @@ pipeline {
 						echo "org id: ${IQ_ORGANISATION_ID}"
 					}
 					else {
-						error("Returned status code = [$response]")
+						echo "Returned status code = [${response}]"
 
-						def response = sh returnStdout: true, script: "curl -u admin:admin123 -X GET -o ${IQ_ORGANISATIONS_FILE} 'http://localhost:8070/api/v2/organizations'"
+						def status = sh returnStdout: true, script: "curl -u admin:admin123 -X GET -o ${IQ_ORGANISATIONS_FILE} 'http://localhost:8070/api/v2/organizations'"
 						def organisations = readJSON file: "${IQ_ORGANISATIONS_FILE}"
 						sh "cat ${IQ_ORGANISATIONS_FILE}"
 					}
