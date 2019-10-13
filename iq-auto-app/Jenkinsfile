@@ -15,18 +15,19 @@ pipeline {
 			}
 		}
 		
-		// stage('Create Nexus IQ Organisation'{
-		// 	steps {
-		// 		try {
-        //                 //def response = sh returnStdout: true, script: 'curl -u admin:admin123 -X POST -H "Content-Type: application/json" -d '{"name": "My Organization"}' http://localhost:8070/api/v2/organizations'
-        //                 def response = sh returnStdout: true, script: "curl -u admin:admin123 -X POST -H 'Content-Type: application/json' -d '{\"name\": \"${IQ_ORGANISATION}\"}' http://localhost:8070/api/v2/organizations"
-		// 				echo "${response}"
-        //             }
-        //             catch (error) {
-        //                 throw error
-        //             }
-		// 	}
-		// }
+		stage('Create Nexus IQ Organisation'{
+			steps {
+				echo 'Create Nexus IQ Organisation'
+				// try {
+                //         //def response = sh returnStdout: true, script: 'curl -u admin:admin123 -X POST -H "Content-Type: application/json" -d '{"name": "My Organization"}' http://localhost:8070/api/v2/organizations'
+                //         def response = sh returnStdout: true, script: "curl -u admin:admin123 -X POST -H 'Content-Type: application/json' -d '{\"name\": \"${IQ_ORGANISATION}\"}' http://localhost:8070/api/v2/organizations"
+				// 		echo "${response}"
+                // }
+                // catch (error) {
+                //     throw error
+                // }
+			}
+		}
 
 		// stage('Create Nexus IQ Application'){
 		// 	steps {
