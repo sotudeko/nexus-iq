@@ -4,7 +4,8 @@ pipeline {
 
     environment {
 		IQ_ORGANISATION_ID = 'unknown'
-		IQ_ORGANISATION_INFO_FILE = './organisation.json'
+		IQ_ORGANISATION_INFO_FILE = './new_organisation.json'
+		IQ_ORGANISATIONS_FILE = './existing_organisations.json'
     }
 
     stages {
@@ -30,6 +31,10 @@ pipeline {
 					}
 					else {
 						error("Returned status code = [$response]")
+
+						def response = sh returnStdout: true, script: "curl -u admin:admin123 -X GET -o ${IQ_ORGANISATIONS_FILE} 'http://localhost:8070/api/v2/organizations'"
+						def organisations = readJSON file: "${IQ_ORGANISATIONS_FILE}"
+						sh "cat ${IQ_ORGANISATIONS_FILE}"
 					}
 				}
 			}
