@@ -19,11 +19,28 @@ pipeline {
 		stage('Create Nexus IQ Organisation'){
 			steps {
 				script {
+
+					// def status = sh script: "curl -u admin:admin123 -X POST -w %{http_code} -H 'Content-Type: application/json' -o ./org.json -d '{\"name\": \"My Organization\"}' http://localhost:8070/api/v2/organizations", returnStdout: true
+            
+            		//def status = sh script: "curl -s -u admin:admin123 -w %{http_code} -X GET $url -o ${output_file}", returnStdout: true
+
 					try {
-                        def response = sh returnStdout: true, script: "curl -u admin:admin123 -X POST -o ${IQ_ORGANISATION_INFO_FILE} -H 'Content-Type: application/json' -d '{\"name\": \"${IQ_ORGANISATION}\"}' http://localhost:8070/api/v2/organizations"
+                        def response = sh returnStdout: true, script: "curl -u admin:admin123 -X POST -w %{http_code} -o ${IQ_ORGANISATION_INFO_FILE} -H 'Content-Type: application/json' -d '{\"name\": \"${IQ_ORGANISATION}\"}' http://localhost:8070/api/v2/organizations"
+						
 						echo "${response}"
-						echo "---- org info ----"
-						sh "cat ${IQ_ORGANISATION_INFO_FILE}"
+		            
+						if (response == '200' || response == '201') {
+							echo "Success"
+							def org = readJSON file: "${IQ_ORGANISATION_INFO_FILE}"
+							echo "${org}"
+
+							IQ_ORGANISATION_ID = org.id 
+							echo "org id: ${IQ_ORGANISATION_ID}"
+						}
+						else {
+							error("Returned status code = [$response]")
+						}
+
                     }
                     catch (error) {
                         throw error
