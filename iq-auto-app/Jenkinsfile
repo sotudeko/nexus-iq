@@ -34,7 +34,8 @@ pipeline {
 
 						def status = sh returnStdout: true, script: "curl -u admin:admin123 -X GET -o ${IQ_ORGANISATIONS_FILE} 'http://localhost:8070/api/v2/organizations'"
 						def organisations = readJSON file: "${IQ_ORGANISATIONS_FILE}"
-						sh "cat ${IQ_ORGANISATIONS_FILE} | python -m json.tool"
+						//sh "cat ${IQ_ORGANISATIONS_FILE} | python -m json.tool"
+						echo "${organisations}"
 
 						for (i = 0; i < organisations.size(); i++){
 							if (organisations[i].name == "${IQ_ORGANISATION}") {
