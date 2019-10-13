@@ -39,11 +39,11 @@ pipeline {
 
 						for (i = 0; i < organisations.size(); i++){
 							echo "looping organizations ${organisations.organizations[i].name}"
-							if (organisations.organizations[i].name == "${IQ_ORGANISATION}") {
-								IQ_ORGANISATION_ID = organisations.organizations[i].id
-								echo "get existing ord id ${IQ_ORGANISATION_ID}"
-								break
-							}
+							// if (organisations.organizations[i].name == "${IQ_ORGANISATION}") {
+							// 	IQ_ORGANISATION_ID = organisations.organizations[i].id
+							// 	echo "get existing ord id ${IQ_ORGANISATION_ID}"
+							// 	break
+							// }
 						}
 					}
 				}
