@@ -36,6 +36,8 @@ pipeline {
 						def organisations = readJSON file: "${IQ_ORGANISATIONS_FILE}"
 						//sh "cat ${IQ_ORGANISATIONS_FILE} | python -m json.tool"
 						echo "${organisations}"
+						echo "${status}"
+
 
 						for (int i = 0; i < status.size(); i++){
 							echo "looping organizations ${organisations.organizations[i].name}"
