@@ -41,8 +41,15 @@ pipeline {
 
 						organisations.organizations.each { item ->
 							// echo "org: ${item}"
-							echo "org: ${item.id} ${item.name}"
+
+							if ("${item.name}" == "${IQ_ORGANISATION}"){
+								echo "org: ${item.id} ${item.name}"
+								IQ_ORGANISATION_ID = "${item.id}"
+								break
+							}
 						}
+
+						echo "existing org id: ${IQ_ORGANISATION_ID}"
 
 
 						// for (int i = 0; i < status.size(); i++){
