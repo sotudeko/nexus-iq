@@ -4,8 +4,8 @@ pipeline {
 
     environment {
 		IQ_ORGANISATION_ID = 'unknown'
-		IQ_ORGANISATION_INFO_FILE = './new_organisation.json'
-		IQ_ORGANISATIONS_FILE = './existing_organisations.json'
+		IQ_NEW_ORGANISATION_INFO_FILE = './new_organisation.json'
+		IQ_EXISTING_ORGANISATIONS_INFO_FILE = './existing_organisations.json'
     }
 
     stages {
@@ -21,62 +21,49 @@ pipeline {
 			steps {
 				script {
 					 
-                    def response = sh returnStdout: true, script: "curl -s -u admin:admin123 -X POST -w %{http_code} -o ${IQ_ORGANISATION_INFO_FILE} -H 'Content-Type: application/json' -d '{\"name\": \"${IQ_ORGANISATION}\"}' http://localhost:8070/api/v2/organizations"
+					 // Create the organisation 
+                    def response = sh returnStdout: true, script: "curl -s -u admin:admin123 -X POST -w %{http_code} -o ${IQ_NEW_ORGANISATION_INFO_FILE} -H 'Content-Type: application/json' -d '{\"name\": \"${IQ_ORGANISATION}\"}' http://localhost:8070/api/v2/organizations"
 						
 					if (response == '200' || response == '201') {
+
+						// Newly created. Get its id
  						def org = readJSON file: "${IQ_ORGANISATION_INFO_FILE}"
  
 						IQ_ORGANISATION_ID = org.id 
 						echo "org id: ${IQ_ORGANISATION_ID}"
 					}
 					else {
+						// It already exists. Get its id
 						echo "Returned status code = [${response}]"
 
-						def status = sh returnStdout: true, script: "curl -u admin:admin123 -X GET 'http://localhost:8070/api/v2/organizations'"
-						def organisations = readJSON file: "${IQ_ORGANISATIONS_FILE}"
-						// sh "cat ${IQ_ORGANISATIONS_FILE} | python -m json.tool"
-						// echo "${organisations}"
-						// echo "${status}"
-						// echo "size of status" + status.size()
+						def status = sh returnStdout: true, script: "curl -u admin:admin123 -X GET -o ${IQ_EXISTING_ORGANISATIONS_INFO_FILE} 'http://localhost:8070/api/v2/organizations'"
+						def organisations = readJSON file: "${IQ_EXISTING_ORGANISATIONS_INFO_FILE}"
 
 						organisations.organizations.each { item ->
-							// echo "org: ${item}"
 
 							if ("${item.name}" == "${IQ_ORGANISATION}"){
 								echo "found existing org: ${item.id} ${item.name}"
 								IQ_ORGANISATION_ID = "${item.id}"
 							}
 						}
-
-						echo "existing org id: ${IQ_ORGANISATION_ID}"
-
-
-						// for (int i = 0; i < status.size(); i++){
-						// 	echo "looping organizations ${organisations.organizations[i].name}"
-							// if (organisations.organizations[i].name == "${IQ_ORGANISATION}") {
-							// 	IQ_ORGANISATION_ID = organisations.organizations[i].id
-							// 	echo "get existing ord id ${IQ_ORGANISATION_ID}"
-							// 	break
-							// }
-						// }
 					}
 				}
 			}
 		}
 
-		// stage('Create Nexus IQ Application'){
-		// 	steps {
-		// 		script {
-		// 			try {
-        //                 def response = sh returnStdout: true, script: "curl -u admin:admin123 -X POST -H 'Content-Type: application/json' -d '{\"publicId\": \"${IQ_APPLICATION}\",\"name\": \"${IQ_APPLICATION}\",\"organizationId\":\"${IQ_ORGANISATION_ID}\"}' http://localhost:8070/api/v2/applications"
-		// 				echo "${response}"
-        //             }
-        //             catch (error) {
-        //                 throw error
-        //             }
-		// 		}
-		// 	}
-		// }
+		stage('Create Nexus IQ Application'){
+			steps {
+				script {
+					try {
+                        def response = sh returnStdout: true, script: "curl -s -u admin:admin123 -X POST -H 'Content-Type: application/json' -d '{\"publicId\": \"${IQ_APPLICATION}\",\"name\": \"${IQ_APPLICATION}\",\"organizationId\":\"${IQ_ORGANISATION_ID}\"}' http://localhost:8070/api/v2/applications"
+						echo "${response}"
+                    }
+                    catch (error) {
+                        throw error
+                    }
+				}
+			}
+		}
 	}
 }
 
