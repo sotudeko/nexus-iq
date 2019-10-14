@@ -37,8 +37,8 @@ pipeline {
 						//sh "cat ${IQ_ORGANISATIONS_FILE} | python -m json.tool"
 						echo "${organisations}"
 
-						for (int i = 0; i < organisations.size(); i++){
-							echo "looping organizations ${organisations.organizations[i].name}"
+						for (int i = 0; i < status.size(); i++){
+							echo "looping organizations ${status.organizations[i].name}"
 							// if (organisations.organizations[i].name == "${IQ_ORGANISATION}") {
 							// 	IQ_ORGANISATION_ID = organisations.organizations[i].id
 							// 	echo "get existing ord id ${IQ_ORGANISATION_ID}"
