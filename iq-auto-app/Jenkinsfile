@@ -43,9 +43,8 @@ pipeline {
 							// echo "org: ${item}"
 
 							if ("${item.name}" == "${IQ_ORGANISATION}"){
-								echo "org: ${item.id} ${item.name}"
+								echo "found existing org: ${item.id} ${item.name}"
 								IQ_ORGANISATION_ID = "${item.id}"
-								break
 							}
 						}
 
